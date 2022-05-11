@@ -1,19 +1,17 @@
 <template>
-  <div class="home">
-    <h1>Home</h1>
-    <button class="ui primary button">
-      Save
-    </button>
-    <button class="ui button">
-      Discard
-    </button>
-  </div>
+  <BasicLayout>
+    <h2>Estamos en la Home</h2>
+  </BasicLayout>
 </template>
 
 <script>
-// @ is an alias to /src
+import BasicLayout from '../layouts/BasicLayout'
 
 export default {
-  name: 'HomeView'
+  name: 'HomeView',
+  components: {
+    BasicLayout,
+    BasicLayout
+  }
 }
 </script>
