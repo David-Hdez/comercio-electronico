@@ -8,9 +8,8 @@
 import BasicLayout from '../layouts/BasicLayout'
 
 export default {
-  name: 'HomeView',
+  name: 'Home',
   components: {
-    BasicLayout,
     BasicLayout
   }
 }

@@ -8,7 +8,7 @@
                 </router-link>
             </div>
             <div class="right menu">
-                <router-link class="item" to="/login">Iniciar sesión</router-link>
+                <router-link class="item" to="/iniciar-sesion">Iniciar sesión</router-link>
             </div>
         </div>
     </div>
