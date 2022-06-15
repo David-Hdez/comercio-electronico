@@ -4,7 +4,7 @@
             <h2>Registro de usuario</h2>
             <form class="ui form" @submit.prevent="store">
                 <div class="field">
-                    <input type="text" placeholder="Nombre de usuario" v-model="user.name"
+                    <input type="text" placeholder="Nombre de usuario" v-model="user.username"
                         :class="{ error: validations.name }">
                 </div>
                 <div class="field">
@@ -15,7 +15,7 @@
                     <input type="password" placeholder="Contraseña" v-model="user.password"
                         :class="{ error: validations.password }">
                 </div>
-                <button type="submit" class="ui button fluid primary">Crear usuario</button>
+                <button type="submit" class="ui button fluid primary" :class="{ loading }">Crear usuario</button>
             </form>
 
             <router-link to="/iniciar-sesion">Iniciar sesión</router-link>
@@ -27,6 +27,8 @@
 import { ref } from 'vue'
 import BasicLayout from '../layouts/BasicLayout'
 import * as yup from 'yup';
+import { registerApi } from '../api/user'
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'Register',
@@ -43,25 +45,38 @@ export default {
          * @see {@link https://www.npmjs.com/package/yup} for further information.
          */
         let schema = yup.object().shape({
-            name: yup.string().required(true),
+            username: yup.string().required(true),
             email: yup.string().email(true).required(true),
             password: yup.string().required(true),
         });
+        let loading = ref(false);
+        const router = useRouter()
 
         const store = async () => {
             validations.value = {};
+            loading.value = true;
 
             try {
-                await schema.validate(user.value, { abortEarly: false })
+                await schema.validate(user.value, { abortEarly: false });
+
+                try {
+                    const register = await registerApi(user.value);
+
+                    router.push('/iniciar-sesion');
+                } catch (error) {
+                    console.error(error)
+                }
             } catch (error) {
                 error.inner.forEach((element) => {
                     validations.value[element.path] = element.message;
                 });
             }
+
+            loading.value = false;
         }
 
         return {
-            user, store, validations
+            user, store, validations, loading
         }
     }
 }
