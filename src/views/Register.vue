@@ -45,9 +45,9 @@ export default {
          * @see {@link https://www.npmjs.com/package/yup} for further information.
          */
         let schema = yup.object().shape({
-            username: yup.string().required(true),
-            email: yup.string().email(true).required(true),
-            password: yup.string().required(true),
+            username: yup.string().required(),
+            email: yup.string().email().required(),
+            password: yup.string().required(),
         });
         let loading = ref(false);
         const router = useRouter()
