@@ -12,6 +12,13 @@
                         :class="{ error: validations.password }">
                 </div>
                 <button type="submit" class="ui button fluid primary" :class="{ loading }">Entrar</button>
+                <div v-if="api_error?.show" class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Se ha producido un error
+                    </div>
+                    <p>{{ api_error.description }}</p>
+                </div>
             </form>
 
             <router-link to="/registro">Crear cuenta</router-link>
@@ -20,9 +27,11 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import BasicLayout from '../layouts/BasicLayout'
 import * as yup from 'yup';
+import { loginApi } from '../api/user'
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'Login',
@@ -43,6 +52,11 @@ export default {
             password: yup.string().required(),
         });
         let loading = ref(false);
+        let api_error = reactive({
+            show: false,
+            description: 'Inténtelo más tarde'
+        });
+        const router = useRouter()
 
         const login = async () => {
             validations.value = {};
@@ -50,19 +64,39 @@ export default {
 
             try {
                 await schema.validate(user.value, { abortEarly: false });
+
+                try {
+                    const register = await loginApi(user.value);
+                    console.debug(register);
+                    if (!register?.jwt) {
+                        api_error.description = 'Correo o contraseña incorrectos';
+
+                        throw 'Correo o contraseña incorrectos'
+                    }
+
+                    router.push('/');
+                } catch (error) {
+                    console.error(error)
+
+                    api_error.show = true;
+                }
             } catch (error) {
                 console.error(error);
 
                 error.inner.forEach((element) => {
                     validations.value[element.path] = element.message;
                 });
+
+                api_error.description = 'Ingrese los datos requeridos';
+
+                api_error.show = true;
             }
 
             loading.value = false;
         }
 
         return {
-            user, login, validations, loading
+            user, login, validations, loading, api_error
         }
     }
 }
