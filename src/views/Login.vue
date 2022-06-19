@@ -32,6 +32,7 @@ import BasicLayout from '../layouts/BasicLayout'
 import * as yup from 'yup';
 import { loginApi } from '../api/user'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 export default {
     name: 'Login',
@@ -66,13 +67,15 @@ export default {
                 await schema.validate(user.value, { abortEarly: false });
 
                 try {
-                    const register = await loginApi(user.value);
-                    console.debug(register);
-                    if (!register?.jwt) {
+                    const response = await loginApi(user.value);
+
+                    if (!response?.jwt) {
                         api_error.description = 'Correo o contraseña incorrectos';
 
                         throw 'Correo o contraseña incorrectos'
                     }
+
+                    Cookies.set('jwt', response.jwt)
 
                     router.push('/');
                 } catch (error) {
