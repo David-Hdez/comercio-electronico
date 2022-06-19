@@ -14,7 +14,7 @@
                     <span class="ui item cart">
                         <i class="shopping cart icon"></i>
                     </span>
-                    <span class="ui item logout">
+                    <span class="ui item logout" @click="logout">
                         <i class="sign-out icon"></i>
                     </span>
                 </template>
@@ -31,7 +31,14 @@ export default {
     setup() {
         const jwt = Cookies.get('jwt');
 
-        return { jwt }
+        const logout = () => {
+            Cookies.remove('jwt');
+
+            // Will reload the page
+            location.replace('/')
+        }
+
+        return { jwt, logout }
     }
 }
 </script>
