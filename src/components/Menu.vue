@@ -8,15 +8,31 @@
                 </router-link>
             </div>
             <div class="right menu">
-                <router-link class="item" to="/iniciar-sesion">Iniciar sesión</router-link>
+                <router-link class="item" to="/iniciar-sesion" v-if="!jwt">Iniciar sesión</router-link>
+                <template v-if="jwt">
+                    <router-link class="item" to="/orden">Pedidos</router-link>
+                    <span class="ui item cart">
+                        <i class="shopping cart icon"></i>
+                    </span>
+                    <span class="ui item logout">
+                        <i class="sign-out icon"></i>
+                    </span>
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import Cookies from 'js-cookie';
+
 export default {
-    name: 'Menu'
+    name: 'Menu',
+    setup() {
+        const jwt = Cookies.get('jwt');
+
+        return { jwt }
+    }
 }
 </script>
 
