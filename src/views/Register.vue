@@ -2,6 +2,13 @@
     <BasicLayout>
         <div class="register">
             <h2>Registro de usuario</h2>
+            <div v-if="api_error?.show" class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Se ha producido un error
+                </div>
+                <p>{{ api_error.description }}</p>
+            </div>
             <form class="ui form" @submit.prevent="store">
                 <div class="field">
                     <input type="text" placeholder="Nombre de usuario" v-model="user.username"
@@ -24,11 +31,11 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import BasicLayout from '../layouts/BasicLayout'
 import * as yup from 'yup';
-import { registerApi } from '../api/user'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 export default {
     name: 'Register',
@@ -50,6 +57,10 @@ export default {
             password: yup.string().required(),
         });
         let loading = ref(false);
+        let api_error = reactive({
+            show: false,
+            description: 'Inténtelo más tarde'
+        });
         const router = useRouter()
 
         const store = async () => {
@@ -60,11 +71,27 @@ export default {
                 await schema.validate(user.value, { abortEarly: false });
 
                 try {
-                    const register = await registerApi(user.value);
+                    const response = await fetch(`${process.env.VUE_APP_API_URL}/auth/local/register`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user.value)
+                    });
 
-                    router.push('/iniciar-sesion');
+                    const result = await response.json()
+
+                    if (!result?.jwt) {
+                        throw result
+                    }
+
+                    Cookies.set('jwt', result.jwt)
+
+                    router.push('/');
                 } catch (error) {
                     console.error(error)
+
+                    api_error.show = true;
                 }
             } catch (error) {
                 error.inner.forEach((element) => {
@@ -76,7 +103,7 @@ export default {
         }
 
         return {
-            user, store, validations, loading
+            user, store, validations, loading, api_error
         }
     }
 }
@@ -91,6 +118,12 @@ export default {
     }
 
     .ui.form {
+        max-width: 300px !important;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+
+    .ui.negative.message {
         max-width: 300px !important;
         margin: 0 auto;
         margin-bottom: 10px;

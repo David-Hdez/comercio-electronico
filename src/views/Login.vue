@@ -2,6 +2,13 @@
     <BasicLayout>
         <div class="login">
             <h2>Iniciar sesión</h2>
+            <div v-if="api_error?.show" class="ui negative message">
+                <i class="close icon"></i>
+                <div class="header">
+                    Se ha producido un error
+                </div>
+                <p>{{ api_error.description }}</p>
+            </div>
             <form class="form ui" @submit.prevent="login">
                 <div class="field">
                     <input type="email" placeholder="Correo" v-model="user.identifier"
@@ -12,15 +19,7 @@
                         :class="{ error: validations.password }">
                 </div>
                 <button type="submit" class="ui button fluid primary" :class="{ loading }">Entrar</button>
-                <div v-if="api_error?.show" class="ui negative message">
-                    <i class="close icon"></i>
-                    <div class="header">
-                        Se ha producido un error
-                    </div>
-                    <p>{{ api_error.description }}</p>
-                </div>
             </form>
-
             <router-link to="/registro">Crear cuenta</router-link>
         </div>
     </BasicLayout>
@@ -30,7 +29,6 @@
 import { ref, reactive } from 'vue'
 import BasicLayout from '../layouts/BasicLayout'
 import * as yup from 'yup';
-import { loginApi } from '../api/user'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
 
@@ -67,15 +65,23 @@ export default {
                 await schema.validate(user.value, { abortEarly: false });
 
                 try {
-                    const response = await loginApi(user.value);
+                    const response = await fetch(`${process.env.VUE_APP_API_URL}/auth/local`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user.value)
+                    });
 
-                    if (!response?.jwt) {
+                    const result = await response.json()
+
+                    if (!result?.jwt) {
                         api_error.description = 'Correo o contraseña incorrectos';
 
                         throw 'Correo o contraseña incorrectos'
                     }
 
-                    Cookies.set('jwt', response.jwt)
+                    Cookies.set('jwt', result.jwt)
 
                     router.push('/');
                 } catch (error) {
@@ -122,6 +128,12 @@ export default {
             border-color: #faa;
             background-color: #ffeded;
         }
+    }
+
+    .ui.negative.message {
+        max-width: 300px !important;
+        margin: 0 auto;
+        margin-bottom: 10px;
     }
 }
 </style>
