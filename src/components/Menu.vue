@@ -4,7 +4,9 @@
             <div class="left menu">
                 <router-link class="item" to="/">
                     <img class="iu small image" src="../assets/logo.png" alt="Comercio">
-                    <p>Categorias...</p>
+                    <template v-for="category in categories" :key="category.id">
+                        <router-link class="item" :to="category.slug">{{ category.title }}</router-link>
+                    </template>
                 </router-link>
             </div>
             <div class="right menu">
@@ -52,7 +54,7 @@ export default {
             }
         })
 
-        return { jwt, logout }
+        return { jwt, logout, categories }
     }
 }
 </script>
