@@ -24,12 +24,14 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
 import Cookies from 'js-cookie';
 
 export default {
     name: 'Menu',
     setup() {
         const jwt = Cookies.get('jwt');
+        let categories = ref()
 
         const logout = () => {
             Cookies.remove('jwt');
@@ -37,6 +39,18 @@ export default {
             // Will reload the page
             location.replace('/')
         }
+
+        onMounted(async () => {
+            try {
+                const response = await fetch(`${process.env.VUE_APP_API_URL}/categories`);
+
+                const result = await response.json()
+
+                categories.value = result;
+            } catch (error) {
+                console.error(error)
+            }
+        })
 
         return { jwt, logout }
     }
