@@ -4,7 +4,7 @@
     <div class="ui grid">
       <div class="sixten wide mobile eight wide tablet four wide computer column" v-for="product in products"
         :key="product.id">
-        <Product :product="product"/>
+        <Product :product="product" />
       </div>
     </div>
   </BasicLayout>
@@ -28,7 +28,7 @@ export default {
         const response = await fetch(`${process.env.VUE_APP_API_URL}/products?_sort=created_at:desc`);
 
         const result = await response.json()
-        console.debug(result);
+
         products.value = result;
       } catch (error) {
         console.error(error)
