@@ -21,11 +21,12 @@ export default {
     BasicLayout, Product
   },
   setup() {
-    let products = ref()
+    let products = ref();
+    let limit = 1000;
 
     onMounted(async () => {
       try {
-        const response = await fetch(`${process.env.VUE_APP_API_URL}/products?_sort=created_at:desc`);
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/products?_sort=created_at:desc&_limit=${limit}`);
 
         const result = await response.json()
 

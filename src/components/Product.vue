@@ -21,7 +21,7 @@ export default {
     },
     setup(props) {
         const api_url = ref(process.env.VUE_APP_API_URL);
-        console.debug(props.product)
+        console.debug('Product prop', props.product)
         return { api_url }
     }
 }

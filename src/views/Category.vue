@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { onMounted } from 'vue'
 import BasicLayout from '../layouts/BasicLayout'
 
 export default {
@@ -17,9 +18,22 @@ export default {
       () => this.$route.params,
       (toParams, previousParams) => {
         // react to route changes...
-        console.debug(toParams)
+        console.debug('react to route changes', toParams)
       }
     )
   },
+  setup() {
+    onMounted(async () => {
+      try {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/products?_where[category.slug]=cereales&_sort=created_at:desc`);
+
+        const result = await response.json()
+
+        console.debug('by category', result);
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }
 }
 </script>
