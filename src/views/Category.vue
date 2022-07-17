@@ -1,18 +1,25 @@
 <template>
   <BasicLayout>
-    <h1>This is Category</h1>
+    <div class="ui grid">
+      <div class="sixten wide mobile eight wide tablet four wide computer column" v-for="product in productsData"
+        :key="product.id">
+        <Product :product="product" />
+      </div>
+    </div>
   </BasicLayout>
 </template>
 
 <script>
 import { onMounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import Product from '../components/Product.vue';
 import BasicLayout from '../layouts/BasicLayout';
 
 export default {
   name: 'Category',
   components: {
-    BasicLayout
+    BasicLayout,
+    Product
   },
   setup() {
     const route = useRoute();
@@ -38,12 +45,14 @@ export default {
         const response = await fetch(`${process.env.VUE_APP_API_URL}/products?_where[category.slug]=${category}&_sort=created_at:desc`);
 
         const result = await response.json();
-        console.debug('products', result);
+
         productsData.value = result;
       } catch (error) {
         console.error(error)
       }
     }
+
+    return { productsData }
   }
 }
 </script>
