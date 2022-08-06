@@ -13,7 +13,7 @@
                 <router-link class="item" to="/iniciar-sesion" v-if="!jwt">Iniciar sesión</router-link>
                 <template v-if="jwt">
                     <router-link class="item" to="/orden">Pedidos</router-link>
-                    <span class="ui item cart">
+                    <span class="ui item cart" @click="expandCart">
                         <i class="shopping cart icon"></i>
                     </span>
                     <span class="ui item logout" @click="logout">
@@ -28,18 +28,24 @@
 <script>
 import { ref, onMounted } from 'vue';
 import Cookies from 'js-cookie';
+import { useCartStore } from '@/stores/cart'
 
 export default {
     name: 'Menu',
     setup() {
         const jwt = Cookies.get('jwt');
         let categories = ref()
+        const cart = useCartStore();
 
         const logout = () => {
             Cookies.remove('jwt');
 
             // Will reload the page
             location.replace('/')
+        }
+
+        function expandCart() {
+            cart.show();
         }
 
         onMounted(async () => {
@@ -54,7 +60,7 @@ export default {
             }
         })
 
-        return { jwt, logout, categories }
+        return { jwt, logout, categories, expandCart }
     }
 }
 </script>
