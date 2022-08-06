@@ -12,8 +12,13 @@ export const useCartStore = defineStore('cart', {
         addProduct(id) {
             this.products.push(id);
         },
-        async show() {
+        show() {
             this.open = true;
+        },
+        close() {
+            this.open = false;
+        },
+        async listing() {
             let products_details = [];
 
             try {
@@ -40,9 +45,6 @@ export const useCartStore = defineStore('cart', {
                 console.error(error);
                 return
             }
-        },
-        close() {
-            this.open = false;
         }
     },
 })

@@ -3,27 +3,58 @@
     <div class="cart" :class="{ open: cart.open }">
         <div>
             <CartHeader :shrink="shrink" />
+            <CartBody :products="products" />
         </div>
     </div>
 </template>
 
 <script>
+import { ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import CartHeader from './CartHeader';
+import CartBody from './CartBody'
 
 export default {
     name: 'Cart',
     components: {
-        CartHeader
+        CartHeader,
+        CartBody
     },
     setup() {
         const cart = useCartStore();
+        let products = ref();
 
         function shrink() {
             cart.close();
         }
 
-        return { cart, shrink }
+        async function productsList() {
+            const response = await cart.listing();
+            products.value = response;
+        }
+
+        cart.$onAction(
+            ({
+                name, // name of the action
+                store, // store instance, same as `someStore`
+                args, // array of parameters passed to the action
+                after, // hook after the action returns or resolves
+                onError, // hook if the action throws or rejects
+            }) => {
+                if (name == 'show') {
+                    productsList()
+                }
+
+                // this will trigger if the action throws or returns a promise that rejects
+                onError((error) => {
+                    console.warn(
+                        `Failed "${name}" after ${Date.now() - startTime}ms.\nError: ${error}.`
+                    )
+                })
+            }
+        )
+
+        return { cart, shrink, products }
     }
 }
 </script>

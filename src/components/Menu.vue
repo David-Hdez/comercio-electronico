@@ -36,7 +36,6 @@ export default {
         const jwt = Cookies.get('jwt');
         let categories = ref()
         const cart = useCartStore();
-        let products = ref();
 
         const logout = () => {
             Cookies.remove('jwt');
@@ -45,9 +44,8 @@ export default {
             location.replace('/')
         }
 
-        async function expandCart() {
-            const response = await cart.show();
-            products.value = response;
+        function expandCart() {
+            cart.show();
         }
 
         onMounted(async () => {
