@@ -7,12 +7,13 @@
             <div class="header">{{ product.name }}</div>
             <div class="description">${{ product.price }}</div>
         </div>
-        <div class="ui button primary">Comprar</div>
+        <div class="ui button primary" @click="addToCart(product.id)">Comprar</div>
     </div>
 </template>
 
 <script>
 import { ref } from 'vue'
+import { useCartStore } from '@/stores/cart'
 
 export default {
     name: 'Product',
@@ -21,8 +22,13 @@ export default {
     },
     setup(props) {
         const api_url = ref(process.env.VUE_APP_API_URL);
+        const cart = useCartStore();
 
-        return { api_url }
+        function addToCart(product) {
+            cart.addProduct(product);
+        }
+
+        return { api_url, addToCart }
     }
 }
 </script>
