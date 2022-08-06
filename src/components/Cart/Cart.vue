@@ -1,7 +1,8 @@
 <template>
+    <div class="cart-dimmer" :class="{ open: cart.open }" @click="shrink" />
     <div class="cart" :class="{ open: cart.open }">
         <h1>Carrito</h1>
-        <button>Cerrar</button>
+        <button @click="shrink">Cerrar</button>
     </div>
 </template>
 
@@ -17,12 +18,27 @@ export default {
             cart.close();
         }
 
-        return { cart }
+        return { cart, shrink }
     }
 }
 </script>
 
 <style scoped lang="scss">
+.cart-dimmer {
+    opacity: 0;
+    transition: transform 0.5 ease;
+
+    &.open {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        opacity: 0.7;
+    }
+}
+
 .cart {
     position: fixed;
     right: 0;
@@ -34,6 +50,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: transform 0.9s ease;
     transform: translateX(150%);
 
     &.open {
