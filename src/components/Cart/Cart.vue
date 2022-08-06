@@ -1,16 +1,21 @@
 <template>
     <div class="cart-dimmer" :class="{ open: cart.open }" @click="shrink" />
     <div class="cart" :class="{ open: cart.open }">
-        <h1>Carrito</h1>
-        <button @click="shrink">Cerrar</button>
+        <div>
+            <CartHeader :shrink="shrink" />
+        </div>
     </div>
 </template>
 
 <script>
-import { useCartStore } from '@/stores/cart'
+import { useCartStore } from '@/stores/cart';
+import CartHeader from './CartHeader';
 
 export default {
     name: 'Cart',
+    components: {
+        CartHeader
+    },
     setup() {
         const cart = useCartStore();
 
