@@ -8,10 +8,10 @@
                     <p>${{ product.price }}</p>
                     <div class="quantity">
                         <button class="ui button primary" size="large"
-                            @click="increaseProductCart(product.id)">+</button>
+                            @click="increaseProductCart(product.id, product.price)">+</button>
                         <p>{{ product.quantity }}</p>
                         <button class="ui button primary" size="large"
-                            @click="decreaseProductCart(product.id)">-</button>
+                            @click="decreaseProductCart(product.id, product.price)">-</button>
                     </div>
                 </div>
             </div>
@@ -31,12 +31,12 @@ export default {
         const apiUrl = process.env.VUE_APP_API_URL;
         const cart = useCartStore();
 
-        const increaseProductCart = (id) => {
-            cart.addProduct(id);
+        const increaseProductCart = (id, price) => {
+            cart.addProduct(id, price);
         }
 
-        const decreaseProductCart = (id) => {
-            cart.removeProduct(id);
+        const decreaseProductCart = (id, price) => {
+            cart.removeProduct(id, price);
         }
 
         return { apiUrl, increaseProductCart, decreaseProductCart }

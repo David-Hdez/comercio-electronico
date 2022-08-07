@@ -5,17 +5,22 @@ export const useCartStore = defineStore('cart', {
     state: () => {
         return {
             products: [],
+            total: 0,
             open: false
         }
     },
     actions: {
-        addProduct(id) {
+        addProduct(id, price) {
             this.products.push(id);
+            this.total += price;
         },
-        removeProduct(id) {
+        removeProduct(id, price) {
             const product = this.products.indexOf(id);
 
-            if (product > -1) this.products.splice(product, 1);
+            if (product > -1) {
+                this.products.splice(product, 1);
+                this.total = this.total - price;
+            }
         },
         show() {
             this.open = true;

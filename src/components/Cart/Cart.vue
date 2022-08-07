@@ -5,6 +5,8 @@
             <CartHeader :shrink="shrink" />
             <CartBody :products="products" />
         </div>
+
+        <CartFooter v-if="products" />
     </div>
 </template>
 
@@ -12,13 +14,15 @@
 import { ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import CartHeader from './CartHeader';
-import CartBody from './CartBody'
+import CartBody from './CartBody';
+import CartFooter from './CartFooter';
 
 export default {
     name: 'Cart',
     components: {
         CartHeader,
-        CartBody
+        CartBody,
+        CartFooter
     },
     setup() {
         const cart = useCartStore();
@@ -41,6 +45,8 @@ export default {
                 after, // hook after the action returns or resolves
                 onError, // hook if the action throws or rejects
             }) => {
+                const startTime = Date.now()
+
                 if (name == 'show' || name == 'addProduct' || name == 'removeProduct') {
                     productsList()
                 }

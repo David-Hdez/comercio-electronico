@@ -7,7 +7,7 @@
             <div class="header">{{ product.name }}</div>
             <div class="description">${{ product.price }}</div>
         </div>
-        <div class="ui button primary" @click="addToCart(product.id)">Comprar</div>
+        <div class="ui button primary" @click="addToCart(product.id, product.price)">Comprar</div>
     </div>
 </template>
 
@@ -24,8 +24,8 @@ export default {
         const api_url = ref(process.env.VUE_APP_API_URL);
         const cart = useCartStore();
 
-        const addToCart = (product) => {
-            cart.addProduct(product);
+        const addToCart = (product, price) => {
+            cart.addProduct(product, price);
         }
 
         return { api_url, addToCart }
