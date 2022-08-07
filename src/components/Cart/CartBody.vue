@@ -10,7 +10,8 @@
                         <button class="ui button primary" size="large"
                             @click="increaseProductCart(product.id)">+</button>
                         <p>{{ product.quantity }}</p>
-                        <button class="ui button primary" size="large">-</button>
+                        <button class="ui button primary" size="large"
+                            @click="decreaseProductCart(product.id)">-</button>
                     </div>
                 </div>
             </div>
@@ -34,7 +35,11 @@ export default {
             cart.addProduct(id);
         }
 
-        return { apiUrl, increaseProductCart }
+        const decreaseProductCart = (id) => {
+            cart.removeProduct(id);
+        }
+
+        return { apiUrl, increaseProductCart, decreaseProductCart }
     }
 }
 </script>

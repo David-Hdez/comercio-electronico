@@ -12,6 +12,11 @@ export const useCartStore = defineStore('cart', {
         addProduct(id) {
             this.products.push(id);
         },
+        removeProduct(id) {
+            const product = this.products.indexOf(id);
+
+            if (product > -1) this.products.splice(product, 1);
+        },
         show() {
             this.open = true;
         },

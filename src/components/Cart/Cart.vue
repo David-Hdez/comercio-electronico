@@ -41,7 +41,7 @@ export default {
                 after, // hook after the action returns or resolves
                 onError, // hook if the action throws or rejects
             }) => {
-                if (name == 'show' || name == 'addProduct') {
+                if (name == 'show' || name == 'addProduct' || name == 'removeProduct') {
                     productsList()
                 }
 
