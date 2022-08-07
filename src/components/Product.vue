@@ -24,7 +24,7 @@ export default {
         const api_url = ref(process.env.VUE_APP_API_URL);
         const cart = useCartStore();
 
-        function addToCart(product) {
+        const addToCart = (product) => {
             cart.addProduct(product);
         }
 

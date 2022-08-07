@@ -24,11 +24,11 @@ export default {
         const cart = useCartStore();
         let products = ref();
 
-        function shrink() {
+        const shrink = () => {
             cart.close();
         }
 
-        async function productsList() {
+        const productsList = async () => {
             const response = await cart.listing();
             products.value = response;
         }
@@ -41,7 +41,7 @@ export default {
                 after, // hook after the action returns or resolves
                 onError, // hook if the action throws or rejects
             }) => {
-                if (name == 'show') {
+                if (name == 'show' || name == 'addProduct') {
                     productsList()
                 }
 

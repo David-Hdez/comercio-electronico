@@ -7,7 +7,8 @@
                 <div class="price">
                     <p>${{ product.price }}</p>
                     <div class="quantity">
-                        <button class="ui button primary" size="large">+</button>
+                        <button class="ui button primary" size="large"
+                            @click="increaseProductCart(product.id)">+</button>
                         <p>{{ product.quantity }}</p>
                         <button class="ui button primary" size="large">-</button>
                     </div>
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+import { useCartStore } from '@/stores/cart';
+
 export default {
     name: 'CartBody',
     props: {
@@ -25,8 +28,13 @@ export default {
     },
     setup() {
         const apiUrl = process.env.VUE_APP_API_URL;
+        const cart = useCartStore();
 
-        return { apiUrl }
+        const increaseProductCart = (id) => {
+            cart.addProduct(id);
+        }
+
+        return { apiUrl, increaseProductCart }
     }
 }
 </script>

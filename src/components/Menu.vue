@@ -44,7 +44,7 @@ export default {
             location.replace('/')
         }
 
-        function expandCart() {
+        const expandCart = () => {
             cart.show();
         }
 
