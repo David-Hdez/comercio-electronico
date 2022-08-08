@@ -4,6 +4,7 @@ import Login from '../views/Login.vue';
 import Register from '../views/Register.vue';
 import Category from '../views/Category.vue';
 import Cart from '../views/Cart.vue';
+import Orders from '../views/Orders.vue';
 import Cookies from 'js-cookie';
 
 const routes = [
@@ -26,6 +27,11 @@ const routes = [
     path: '/carrito',
     name: 'cart',
     component: Cart
+  },
+  {
+    path: '/ordenes',
+    name: 'orders',
+    component: Orders
   },
   {
     path: '/:category',

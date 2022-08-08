@@ -79,6 +79,7 @@ export default {
         const result = await response.json();
 
         cart.products = [];
+        cart.total = 0;
 
         router.push('/ordenes');
 

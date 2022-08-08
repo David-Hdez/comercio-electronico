@@ -12,7 +12,7 @@
             <div class="right menu">
                 <router-link class="item" to="/iniciar-sesion" v-if="!jwt">Iniciar sesión</router-link>
                 <template v-if="jwt">
-                    <router-link class="item" to="/orden">Pedidos</router-link>
+                    <router-link class="item" to="/ordenes">Pedidos</router-link>
                     <span class="ui item cart" @click="expandCart">
                         <i class="shopping cart icon"></i>
                     </span>
