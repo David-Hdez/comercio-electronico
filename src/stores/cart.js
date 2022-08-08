@@ -55,6 +55,16 @@ export const useCartStore = defineStore('cart', {
                 console.error(error);
                 return
             }
+        },
+        removeArticle(id, price) {
+            const product = this.products.indexOf(id);
+
+            if (product > -1) {
+                this.products.splice(product, 1);
+                this.total = this.total - price;
+
+                this.removeArticle(id, price);
+            }
         }
     },
 })

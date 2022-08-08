@@ -16,7 +16,7 @@
           <td>{{ product.quantity }}</td>
           <td>${{ product.price }}</td>
           <td class="product-action">
-            <i class="close icon"></i>
+            <i class="close icon" @click="cart.removeArticle(product.id, product.price)"></i>
           </td>
         </tr>
         <tr>
@@ -46,9 +46,36 @@ export default {
     let products = ref();
 
     onMounted(async () => {
+      await productsList();
+    })
+
+    const productsList = async () => {
       const response = await cart.listing();
       products.value = response;
-    })
+    }
+
+    cart.$onAction(
+      ({
+        name, // name of the action
+        store, // store instance, same as `someStore`
+        args, // array of parameters passed to the action
+        after, // hook after the action returns or resolves
+        onError, // hook if the action throws or rejects
+      }) => {
+        const startTime = Date.now()
+
+        if (name == 'removeArticle') {
+          productsList()
+        }
+
+        // this will trigger if the action throws or returns a promise that rejects
+        onError((error) => {
+          console.warn(
+            `Failed "${name}" after ${Date.now() - startTime}ms.\nError: ${error}.`
+          )
+        })
+      }
+    )
 
     return { products, cart }
   }
@@ -58,5 +85,6 @@ export default {
 <style lang="scss" scoped>
 .product-action {
   text-align: center;
+  cursor: pointer;
 }
 </style>
