@@ -27,7 +27,7 @@
       </tbody>
     </table>
 
-    <button class="ui button primary fluid" v-if="products">Generar Pedido</button>
+    <button class="ui button primary fluid" v-if="products" @click="createOrder">Generar Pedido</button>
 
     <h3 v-if="!products">No tienes productos en el carrito</h3>
   </BasicLayout>
@@ -37,6 +37,8 @@
 import { ref, onMounted } from 'vue'
 import BasicLayout from '../layouts/BasicLayout';
 import { useCartStore } from '@/stores/cart';
+import jwt_decode from "jwt-decode";
+import Cookies from 'js-cookie';
 
 export default {
   name: 'Cart',
@@ -52,6 +54,33 @@ export default {
     const productsList = async () => {
       const response = await cart.listing();
       products.value = response;
+    }
+
+    const createOrder = async () => {
+      const jwt = Cookies.get('jwt');
+      const { id } = jwt_decode(jwt);
+      const order = {
+        users_permissions_user: id,
+        totalPayment: cart.total,
+        detail: products.value
+      }
+
+      try {
+        const response = await fetch(`${process.env.VUE_APP_API_URL}/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(order)
+        });
+
+        const result = await response.json();
+
+        return result;
+      } catch (error) {
+        console.error(error);
+        return;
+      }
     }
 
     cart.$onAction(
@@ -77,7 +106,7 @@ export default {
       }
     )
 
-    return { products, cart }
+    return { products, cart, createOrder }
   }
 }
 </script>
