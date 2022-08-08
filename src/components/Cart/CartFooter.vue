@@ -2,7 +2,7 @@
     <div class="cart-footer">
         <p>Total: ${{ cart.total }}</p>
 
-        <router-link to="/cart">
+        <router-link to="/carrito">
             <button class="ui button primary fluid btn-buy" @click="shrink">Comprar</button>
         </router-link>
     </div>
