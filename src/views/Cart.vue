@@ -22,7 +22,7 @@
         <tr>
           <td></td>
           <td>Total:</td>
-          <td colspan="2">$</td>
+          <td colspan="2">${{ cart.total }}</td>
         </tr>
       </tbody>
     </table>
@@ -50,7 +50,7 @@ export default {
       products.value = response;
     })
 
-    return { products }
+    return { products, cart }
   }
 }
 </script>
