@@ -34,7 +34,8 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'
 import BasicLayout from '../layouts/BasicLayout';
 import { useCartStore } from '@/stores/cart';
 import jwt_decode from "jwt-decode";
@@ -44,6 +45,7 @@ export default {
   name: 'Cart',
   components: { BasicLayout },
   setup() {
+    const router = useRouter();
     const cart = useCartStore();
     let products = ref();
 
@@ -75,6 +77,10 @@ export default {
         });
 
         const result = await response.json();
+
+        cart.products = [];
+
+        router.push('/ordenes');
 
         return result;
       } catch (error) {
