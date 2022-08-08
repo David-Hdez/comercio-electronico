@@ -21,7 +21,7 @@ export default {
         product: Object
     },
     setup(props) {
-        const api_url = ref(process.env.VUE_APP_API_URL);
+        const api_url = process.env.VUE_APP_API_URL;
         const cart = useCartStore();
 
         const addToCart = (product, price) => {
